@@ -1,0 +1,26 @@
+{
+  "name": "Phrase Pocket – Everyday English",
+  "short_name": "Phrase Pocket",
+  "description": "یادداشت و مرور عبارت‌های کاربردی انگلیسی؛ بدون سرور و قابل استفاده آفلاین.",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

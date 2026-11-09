@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="description" content="یادداشت و مرور عبارت‌های کاربردی انگلیسی؛ بدون سرور و قابل استفاده آفلاین." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Phrase Pocket" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./icons/icon-180.png" />
+  <link rel="icon" href="./icons/icon-192.png" />
+  <link rel="stylesheet" href="./styles.css" />
+  <title>Phrase Pocket</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Everyday English</p>
+        <h1>Phrase Pocket</h1>
+        <p class="subtitle">عبارت‌هایی را ذخیره کن که واقعاً در کار و زندگی می‌شنوی.</p>
+      </div>
+      <button id="themeButton" class="icon-button" type="button" aria-label="تغییر تم" title="تغییر تم">
+        <span aria-hidden="true">◐</span>
+      </button>
+    </header>
+
+    <main>
+      <section class="stats-grid" aria-label="آمار یادگیری">
+        <article class="stat-card">
+          <span>همه عبارت‌ها</span>
+          <strong id="totalCount">0</strong>
+        </article>
+        <article class="stat-card accent">
+          <span>مرور امروز</span>
+          <strong id="dueCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>یادگرفته‌شده</span>
+          <strong id="masteredCount">0</strong>
+        </article>
+      </section>
+
+      <section id="captureSection" class="panel capture-panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Quick capture</p>
+            <h2 id="formTitle">یادداشت سریع</h2>
+          </div>
+          <button id="resetFormButton" class="text-button hidden" type="button">لغو ویرایش</button>
+        </div>
+
+        <form id="phraseForm" autocomplete="off">
+          <input id="editingId" type="hidden" />
+
+          <label class="field-label" for="expression">عبارت انگلیسی <span aria-hidden="true">*</span></label>
+          <input id="expression" class="text-input ltr" name="expression" type="text" required maxlength="120" placeholder="مثلاً: I'll get back to you" autocapitalize="sentences" />
+
+          <label class="field-label" for="meaning">معنی کوتاه</label>
+          <input id="meaning" class="text-input" name="meaning" type="text" maxlength="160" placeholder="مثلاً: بعداً بهت خبر می‌دم" />
+
+          <details class="more-fields">
+            <summary>جمله‌ها و جزئیات بیشتر</summary>
+            <div class="details-body">
+              <label class="field-label" for="heardSentence">جمله‌ای که شنیدی</label>
+              <textarea id="heardSentence" class="text-input ltr" name="heardSentence" rows="2" maxlength="300" placeholder="Let me check and I'll get back to you."></textarea>
+
+              <label class="field-label" for="mySentence">جمله‌ی خودت</label>
+              <textarea id="mySentence" class="text-input ltr" name="mySentence" rows="2" maxlength="300" placeholder="I'll check the API logs and get back to you."></textarea>
+
+              <div class="two-column">
+                <div>
+                  <label class="field-label" for="source">منبع</label>
+                  <select id="source" class="text-input" name="source">
+                    <option value="work">محیط کار</option>
+                    <option value="daily">زندگی روزمره</option>
+                    <option value="podcast">پادکست</option>
+                    <option value="other">سایر</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="field-label" for="tag">برچسب</label>
+                  <input id="tag" class="text-input" name="tag" type="text" maxlength="40" placeholder="مثلاً meeting" />
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <div class="form-actions">
+            <button id="saveButton" class="primary-button" type="submit">ذخیره عبارت</button>
+            <button id="saveInboxButton" class="secondary-button" type="button">فقط برای بعد ذخیره کن</button>
+          </div>
+        </form>
+      </section>
+
+      <nav class="tabbar" aria-label="بخش‌های برنامه">
+        <button class="tab-button active" type="button" data-tab="library">عبارت‌ها</button>
+        <button class="tab-button" type="button" data-tab="review">مرور</button>
+        <button class="tab-button" type="button" data-tab="backup">بکاپ</button>
+      </nav>
+
+      <section id="libraryTab" class="tab-panel active" data-panel="library">
+        <div class="toolbar">
+          <label class="search-box" for="searchInput">
+            <span aria-hidden="true">⌕</span>
+            <input id="searchInput" type="search" placeholder="جست‌وجوی عبارت، معنی یا برچسب" />
+          </label>
+          <select id="filterSelect" class="compact-select" aria-label="فیلتر عبارت‌ها">
+            <option value="all">همه</option>
+            <option value="due">نیازمند مرور</option>
+            <option value="inbox">صندوق ورودی</option>
+            <option value="mastered">یادگرفته‌شده</option>
+          </select>
+        </div>
+
+        <div id="phraseList" class="phrase-list"></div>
+        <div id="libraryEmpty" class="empty-state hidden">
+          <div class="empty-icon">Aa</div>
+          <h3>اولین عبارتت را ثبت کن</h3>
+          <p>چیزی را بنویس که امروز در محیط کار، پادکست یا زندگی روزمره شنیدی.</p>
+        </div>
+      </section>
+
+      <section id="reviewTab" class="tab-panel" data-panel="review">
+        <div class="review-header">
+          <div>
+            <p class="eyebrow">Active recall</p>
+            <h2>مرور امروز</h2>
+          </div>
+          <span id="reviewProgress" class="progress-pill">۰ از ۰</span>
+        </div>
+
+        <div id="reviewCard" class="review-card hidden">
+          <div class="review-card-topline">
+            <span id="reviewSource" class="source-badge"></span>
+            <span id="reviewLevel" class="level-label"></span>
+          </div>
+          <p class="review-hint">معنی و کاربرد این عبارت را به یاد بیاور:</p>
+          <h3 id="reviewExpression" class="ltr"></h3>
+          <button id="revealButton" class="primary-button reveal-button" type="button">نمایش پاسخ</button>
+
+          <div id="reviewAnswer" class="review-answer hidden">
+            <div class="answer-block">
+              <span>معنی</span>
+              <p id="reviewMeaning"></p>
+            </div>
+            <div id="heardAnswerBlock" class="answer-block hidden">
+              <span>جمله شنیده‌شده</span>
+              <p id="reviewHeard" class="ltr"></p>
+            </div>
+            <div id="myAnswerBlock" class="answer-block hidden">
+              <span>جمله خودت</span>
+              <p id="reviewMine" class="ltr"></p>
+            </div>
+
+            <p class="rating-label">یادآوری این عبارت چطور بود؟</p>
+            <div class="rating-grid">
+              <button type="button" class="rating-button" data-rating="again"><strong>دوباره</strong><small>۱۰ دقیقه</small></button>
+              <button type="button" class="rating-button" data-rating="hard"><strong>سخت</strong><small>۱ روز</small></button>
+              <button type="button" class="rating-button" data-rating="good"><strong>خوب</strong><small>فاصله بیشتر</small></button>
+              <button type="button" class="rating-button" data-rating="easy"><strong>آسان</strong><small>فاصله زیاد</small></button>
+            </div>
+          </div>
+        </div>
+
+        <div id="reviewEmpty" class="empty-state">
+          <div class="empty-icon">✓</div>
+          <h3>مرور امروز تمام شد</h3>
+          <p>عبارت‌های جدید یا موعددار اینجا نمایش داده می‌شوند.</p>
+          <button id="reviewAllButton" class="secondary-button" type="button">مرور آزاد همه عبارت‌ها</button>
+        </div>
+      </section>
+
+      <section id="backupTab" class="tab-panel" data-panel="backup">
+        <div class="panel settings-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Your data</p>
+              <h2>بکاپ و انتقال اطلاعات</h2>
+            </div>
+          </div>
+          <p class="muted">اطلاعات روی همین دستگاه ذخیره می‌شود. هر چند وقت یک‌بار فایل بکاپ بگیر.</p>
+          <div class="stacked-actions">
+            <button id="exportButton" class="primary-button" type="button">دانلود فایل بکاپ</button>
+            <label class="secondary-button file-button" for="importInput">وارد کردن بکاپ</label>
+            <input id="importInput" class="visually-hidden" type="file" accept="application/json,.json" />
+          </div>
+        </div>
+
+        <div class="panel install-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">iPhone</p>
+              <h2>نصب روی صفحه اصلی</h2>
+            </div>
+          </div>
+          <ol class="steps-list">
+            <li>آدرس برنامه را در Safari باز کن.</li>
+            <li>دکمه Share را بزن.</li>
+            <li>گزینه <span class="ltr inline-text">Add to Home Screen</span> را انتخاب کن.</li>
+            <li>برنامه را از آیکن ساخته‌شده باز کن.</li>
+          </ol>
+          <p id="offlineStatus" class="status-note">در حال بررسی قابلیت آفلاین…</p>
+        </div>
+
+        <div class="danger-zone">
+          <div>
+            <h3>پاک کردن همه اطلاعات</h3>
+            <p>این کار قابل بازگشت نیست؛ قبلش بکاپ بگیر.</p>
+          </div>
+          <button id="clearButton" class="danger-button" type="button">پاک کردن</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Made for real-life English • بدون حساب کاربری و بدون سرور</p>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js" defer></script>
+</body>
+</html>
