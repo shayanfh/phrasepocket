@@ -18,6 +18,7 @@
     editingId: document.querySelector("#editingId"),
     expression: document.querySelector("#expression"),
     meaning: document.querySelector("#meaning"),
+    situation: document.querySelector("#situation"),
     heardSentence: document.querySelector("#heardSentence"),
     mySentence: document.querySelector("#mySentence"),
     source: document.querySelector("#source"),
@@ -42,6 +43,8 @@
     reviewSource: document.querySelector("#reviewSource"),
     reviewLevel: document.querySelector("#reviewLevel"),
     reviewExpression: document.querySelector("#reviewExpression"),
+    reviewSituation: document.querySelector("#reviewSituation"),
+    reviewHint: document.querySelector("#reviewHint"),
     reviewMeaning: document.querySelector("#reviewMeaning"),
     reviewHeard: document.querySelector("#reviewHeard"),
     reviewMine: document.querySelector("#reviewMine"),
@@ -103,6 +106,7 @@
       id: item.id || makeId(),
       expression: String(item.expression || "").trim(),
       meaning: String(item.meaning || "").trim(),
+      situation: String(item.situation || "").trim(),
       heardSentence: String(item.heardSentence || "").trim(),
       mySentence: String(item.mySentence || "").trim(),
       source: sourceLabels[item.source] ? item.source : "other",
@@ -186,6 +190,7 @@
         const haystack = [
           phrase.expression,
           phrase.meaning,
+          phrase.situation,
           phrase.heardSentence,
           phrase.mySentence,
           phrase.tag,
@@ -216,6 +221,9 @@
 
   function renderPhraseCard(phrase) {
     const examples = [
+      phrase.situation
+        ? `<div class="example-row"><span>موقعیت</span><p>${escapeHtml(phrase.situation)}</p></div>`
+        : "",
       phrase.heardSentence
         ? `<div class="example-row"><span>جمله‌ای که شنیدی</span><p class="ltr">${escapeHtml(phrase.heardSentence)}</p></div>`
         : "",
@@ -264,6 +272,7 @@
     return {
       expression: els.expression.value.trim(),
       meaning: els.meaning.value.trim(),
+      situation: els.situation.value.trim(),
       heardSentence: els.heardSentence.value.trim(),
       mySentence: els.mySentence.value.trim(),
       source: els.source.value,
@@ -330,6 +339,7 @@
     els.editingId.value = phrase.id;
     els.expression.value = phrase.expression;
     els.meaning.value = phrase.meaning;
+    els.situation.value = phrase.situation;
     els.heardSentence.value = phrase.heardSentence;
     els.mySentence.value = phrase.mySentence;
     els.source.value = phrase.source;
@@ -412,6 +422,15 @@
     els.reviewLevel.textContent = current.reviewCount
       ? `${toPersianNumber(current.reviewCount)} مرور • فاصله ${toPersianNumber(current.intervalDays)} روز`
       : "عبارت جدید";
+    if (current.situation) {
+      els.reviewHint.textContent = "تو این موقعیت چی میگی؟";
+      els.reviewSituation.textContent = current.situation;
+      els.reviewSituation.classList.remove("ltr");
+    } else {
+      els.reviewHint.textContent = "موقعیت ثبت نشده. معنی و کاربرد این عبارت را به یاد بیاور:";
+      els.reviewSituation.textContent = current.expression;
+      els.reviewSituation.classList.add("ltr");
+    }
     els.reviewExpression.textContent = current.expression;
     els.reviewMeaning.textContent = current.meaning || "معنی ثبت نشده";
     els.reviewHeard.textContent = current.heardSentence;
