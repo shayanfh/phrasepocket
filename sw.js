@@ -1,4 +1,4 @@
-const CACHE_NAME = "phrase-pocket-v1";
+const CACHE_NAME = "phrase-pocket-v2";
 const APP_ASSETS = [
   "./",
   "./index.html",
