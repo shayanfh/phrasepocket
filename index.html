@@ -61,6 +61,9 @@
           <label class="field-label" for="meaning">معنی کوتاه</label>
           <input id="meaning" class="text-input" name="meaning" type="text" maxlength="160" placeholder="مثلاً: بعداً بهت خبر می‌دم" />
 
+          <label class="field-label" for="situation">موقعیت (Situation)</label>
+          <input id="situation" class="text-input" name="situation" type="text" maxlength="200" placeholder="مثلاً: وقتی تو جلسه سوالی میپرسن و جوابش رو همین الان نمیدونی" />
+
           <details class="more-fields">
             <summary>جمله‌ها و جزئیات بیشتر</summary>
             <div class="details-body">
@@ -137,11 +140,15 @@
             <span id="reviewSource" class="source-badge"></span>
             <span id="reviewLevel" class="level-label"></span>
           </div>
-          <p class="review-hint">معنی و کاربرد این عبارت را به یاد بیاور:</p>
-          <h3 id="reviewExpression" class="ltr"></h3>
+          <p id="reviewHint" class="review-hint">تو این موقعیت چی میگی؟</p>
+          <h3 id="reviewSituation"></h3>
           <button id="revealButton" class="primary-button reveal-button" type="button">نمایش پاسخ</button>
 
           <div id="reviewAnswer" class="review-answer hidden">
+            <div class="answer-block">
+              <span>عبارت</span>
+              <p id="reviewExpression" class="ltr"></p>
+            </div>
             <div class="answer-block">
               <span>معنی</span>
               <p id="reviewMeaning"></p>
